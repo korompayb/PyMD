@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-<title>E-Naplo - Bejelentkezés</title>
+<title>PyMD - Bejelentkezés</title>
 
-<md-dialog id="loginDialog">
-    <div slot="headline">Bejelentkezés</div>
-    <form slot="content" id="form-id" method="POST" action="/">
+<md-dialog id="loginDialog"
+        ?quick=${quick}
+        ?no-focus-trap=${noFocusTrap}>
+        <div slot="headline">Bejelentkezés</div>
+        <md-icon slot="icon">account_circle</md-icon>
+    <form slot="content" id="form-id" method="POST" action="{{ url_for('login') }}">
         <md-filled-text-field id="username" label="Felhasználónév" name="username">
             <md-icon-button slot="trailing-icon" type="">
                 <md-icon>person</md-icon>
@@ -19,14 +22,17 @@
             </md-icon-button>
         </md-filled-text-field>
     </form>
+    <form slot="content" method="dialog">
+        {{message}}
+      </form>
     <div slot="actions">
-        <md-text-button form="form-id" value="cancel" onclick="closeDialog()">Mégse </md-text-button>
+        <md-text-button form="form-id" value="cancel" onclick="closeDialog()">Mégse</md-text-button>
         <md-text-button form="form-id" value="submit">
-             <md-icon>send</md-icon>
+            <md-icon>send</md-icon>
         </md-text-button>
-        
     </div>
 </md-dialog>
+
 
 <script>
     const dialog = document.getElementById('loginDialog');

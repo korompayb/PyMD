@@ -2,42 +2,55 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Jegyzetek</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Jegyzet neve</th>
-                <th>Írásbeli Téma</th>
-                <th>Dátum</th>
-                <th>Műveletek</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for note in notes %}
-            <tr>
-                <td>
-                    <a href="{{ url_for('view_note', filename=note) }}">{{ note }}</a>
-                </td>
-                <td>--</td> <!-- Itt bővítheted a témát, ha van ilyen adatod -->
-                <td>{{ now.strftime("%Y-%m-%d") }}</td>
-                <td>
-                    <a href="{{ url_for('edit_note', filename=note) }}"><md-fab label="Szerkesztés" variant="teritary">
-                        <md-icon slot="icon">edit</md-icon>
-                    </md-fab></a>
-                    <a href="{{ url_for('delete_note', filename=note) }}" ><md-fab variant="secondary">
-                        <md-icon slot="icon">delete</md-icon>
-                    </md-fab></a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    <div class="edit-button">
-        <a href="{{ url_for('new_note') }}">
-            <md-fab label="Új Jegyzet Írása">
-                <md-icon slot="icon">edit</md-icon>
-            </md-fab>
-        </a>
-    </div>
+<h1>Jegyzetek</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Jegyzet neve</th>
+            <th>Dátum</th>
+            <th>Műveletek</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for note in notes %}
+        <tr>
+            <td>
+                <a href="{{ url_for('view_note', note_id=note.note_id) }}">{{ note.note_name }}.md</a>
+            </td>
+            <td>{{ note.created_at.strftime("%Y-%m-%d") }}</td>
+            <td>     
+                <div style="margin: 16px;">
+                    <md-icon-button id="usage-fixed-anchor"><md-icon>more_vert</md-icon></md-icon-button>
+                </div>
+
+                <md-menu positioning="fixed" id="usage-fixed" anchor="usage-fixed-anchor">
+                    <md-menu-item>
+                        <a href="{{ url_for('edit_note', note_id=note.note_id) }}">
+                            <md-icon slot="icon">edit</md-icon> Szerkesztés</a>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <a href="{{ url_for('delete_note', note_id=note.note_id) }}">
+                            <md-icon slot="icon">delete</md-icon> Törlés </a>
+                    </md-menu-item>
+                </md-menu>
+
+                <script type="module">
+                    const anchorEl = document.body.querySelector('#usage-fixed-anchor');
+                    const menuEl = document.body.querySelector('#usage-fixed');
+
+                    anchorEl.addEventListener('click', () => { menuEl.open = !menuEl.open; });
+                </script>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br>
+<div class="edit-button">
+    <a href="{{ url_for('new_note') }}">
+        <md-fab label="Új Jegyzet Írása">
+            <md-icon slot="icon">edit</md-icon>
+        </md-fab>
+    </a>
+</div>
 {% endblock %}

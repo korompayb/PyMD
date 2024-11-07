@@ -1,7 +1,14 @@
 <!-- templates/view.html -->
 {% extends 'base.html' %}
 {% block content %}
+
 <div class="note-content">
     {{ content | safe }}
 </div>
+<md-fab variant="secondary" data-label="Switch Theme" size="medium">
+    <md-icon slot="icon" aria-hidden="true">arrow_back</md-icon>
+</md-fab>
+
+
+
 {% endblock %}

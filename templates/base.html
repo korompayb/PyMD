@@ -58,24 +58,33 @@ import '@material/web/checkbox/checkbox.js';
 <body>
     <div class="sidebar">
         <div class="nav-item " >
-            <md-icon slot="icon">home</md-icon>
-            Főoldal
+          <a href="{{ url_for('index') }}"><md-icon slot="icon">home</md-icon>Főoldal
+          </a>
         </div>
         <div class="nav-item ">
-            <md-icon slot="icon">grade</md-icon>
-            Jegyeim
+          <a href="{{ url_for('index') }}"><md-icon slot="icon">note</md-icon>Jegyzetek
+          </a>
+            
         </div>
-        <div class="nav-item " >
+       <!--  <div class="nav-item " >
             <md-icon slot="icon">calendar_month</md-icon>
             Órarend
         </div>
         <div class="nav-item " >
             <md-icon slot="icon">edit_document</md-icon>
             Dolgozatok
-        </div>
+        </div> -->
         <div class="nav-item " >
-            <md-icon slot="icon">logout</md-icon>
-            Kilépés
+          <a href="{{ url_for('myprofile') }}"><md-icon slot="icon">account_circle</md-icon><br>{{ username }}
+          </a>
+      </div>
+      <div class="nav-item " >
+        <a href="{{ url_for('about') }}"><md-icon slot="icon">admin_panel_settings</md-icon>Fejlesztők
+        </a>
+    </div>
+        <div class="nav-item " >
+            <a href="{{ url_for('login') }}"><md-icon slot="icon">logout</md-icon>Kilépés</a>
+            
         </div>
         <md-fab class="mode-switch" variant="primary" data-label="Switch Theme" size="medium">
             <md-icon slot="icon" aria-hidden="true" id="theme-icon">dark_mode</md-icon>

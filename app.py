@@ -1,63 +1,156 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from datetime import datetime
-import os
+from pymongo import MongoClient
+import uuid  # UUID generálásához
 
 app = Flask(__name__)
-notes_dir = os.path.join(os.getcwd(), 'notes')
+app.secret_key = 'guzuzgu67686'  # Use a more secure key in production
 
-# Ellenőrizzük, hogy a notes mappa létezik-e, ha nem, létrehozzuk.
-if not os.path.exists(notes_dir):
-    os.makedirs(notes_dir)
+# MongoDB connection
+connection_string = "mongodb+srv://kberci06:DUoBaBgSuw14S2js@maincluster.arwdvps.mongodb.net/?retryWrites=true&w=majority"
+client = MongoClient(connection_string)
+db = client.PyMD
+users_collection = db.users
+notes_collection = db.notes  # Create a new collection for notes
+
+
 
 @app.route('/')
 def index():
-    notes = os.listdir(notes_dir)
-    now = datetime.now()  # Aktuális dátum és idő
-    return render_template('index.html', notes=notes, now=now)
+    if "username" not in session:
+        return redirect(url_for('login'))
 
-# Új jegyzet írása
+    username = session["username"]
+    # Fetch user's notes from the database
+    notes = notes_collection.find({"username": username})
+    # Konvertáljuk az _id-t stringgé, mielőtt a sablonba küldjük
+    notes = [{"note_id": str(note["note_id"]), "note_name": note["note_name"], "created_at": note["created_at"], "content": note["content"]} for note in notes]
+    
+    now = datetime.now()  # Current date and time
+    return render_template('index.html', notes=notes, now=now, username = username)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        user = users_collection.find_one({"username": username})
+
+        if user is None:
+            return render_template('login.html', message='Felhasználó nem található')
+        elif password != user['password']:
+            return render_template('login.html', message='Hibás jelszó')
+        else:
+            session["username"] = username
+            return redirect(url_for('index'))
+    else:
+        return render_template('login.html')
+
+@app.route('/admin_console')
+def about():
+    if "username" not in session:
+        return redirect(url_for('login'))
+    else:
+        username = session["username"]
+    return render_template('about.html', username = username)
+
+
+# Create a new note
 @app.route('/new_note', methods=['GET', 'POST'])
 def new_note():
+    if "username" not in session:
+        return redirect(url_for('login'))
+
     if request.method == 'POST':
-        now = datetime.now()
-        note_name = request.form['note_name']
-        file_path = os.path.join(notes_dir, f"{note_name}.md")
-        # UTF-8 kódolással mentés
-        with open(file_path, 'w', encoding='utf-8') as f:
-            f.write(request.form['content'])
-        return redirect(url_for('index'))
-    return render_template('edit.html', note=None, now=datetime.now())
+        note_name = request.form['note_name']  # A note name
+        content = request.form['content']  # A jegyzet tartalma
+        username = session["username"]  # A felhasználó neve
 
-# Jegyzet szerkesztése
-@app.route('/edit/<filename>', methods=['GET', 'POST'])
-def edit_note(filename):
-    file_path = os.path.join(notes_dir, filename)
+        # Generáljunk egy új UUID-t a jegyzet azonosítójának
+        note_id = str(uuid.uuid4())
+
+        # Save note to MongoDB
+        notes_collection.insert_one({
+            "note_id": note_id,
+            "username": username,
+            "note_name": note_name,
+            "content": content,
+            "created_at": datetime.now()
+        })
+
+        return redirect(url_for('index'))
+
+    return render_template('edit.html', note=None, username = username)  # Ha GET kérés van, akkor üres form
+
+
+@app.route('/edit/<note_id>', methods=['GET', 'POST'])
+def edit_note(note_id):
+    if "username" not in session:
+        return redirect(url_for('login'))
+
+    username = session["username"]
+
     if request.method == 'POST':
-        # UTF-8 kódolással mentés
-        with open(file_path, 'w', encoding='utf-8') as f:
-            f.write(request.form['content'])
+        note_name = request.form.get('note_name')
+        content = request.form.get('content')
+
+        # Ha új jegyzetet hozunk létre
+        if note_id == "new":
+            # Generáljunk egy új UUID-t a jegyzet azonosítójának
+            new_note_id = str(uuid.uuid4())
+            notes_collection.insert_one({
+                "note_id": new_note_id,
+                "username": username,
+                "note_name": note_name,
+                "content": content,
+                "created_at": datetime.now()
+            })
+        else:
+            # Ha meglévő jegyzetet frissítünk
+            notes_collection.update_one(
+                {"note_id": note_id},  # Keresés UUID alapján
+                {"$set": {"note_name": note_name, "content": content}}
+            )
+
         return redirect(url_for('index'))
-    with open(file_path, 'r', encoding='utf-8') as f:
-        content = f.read()
-    return render_template('edit.html', note=content, filename=filename)
 
-# Jegyzet megtekintése olvasó módban
-@app.route('/view/<filename>')
-def view_note(filename):
-    file_path = os.path.join(notes_dir, filename)
-    with open(file_path, 'r') as f:
-        content = f.read()
-    return render_template('view.html', content=content)
+    # Ha GET kérés érkezik
+    note = None
+    if note_id != "new":
+        note = notes_collection.find_one({"note_id": note_id})  # Keresés UUID alapján
 
-# Jegyzet törlése
-@app.route('/delete/<filename>')
-def delete_note(filename):
-    file_path = os.path.join(notes_dir, filename)
-    if os.path.exists(file_path):
-        os.remove(file_path)
+    return render_template('edit.html', note=note, note_id=note_id, username = username)
+
+
+@app.route('/view/<note_id>')
+def view_note(note_id):
+    if "username" not in session:
+        return redirect(url_for('login'))
+    else:
+        username = session["username"]
+    # Keresés UUID alapján
+    note = notes_collection.find_one({"note_id": note_id})
+    return render_template('view.html', content=note['content'], username= username)
+
+
+@app.route('/delete/<note_id>')
+def delete_note(note_id):
+    if "username" not in session:
+        return redirect(url_for('login'))
+
+    # Törlés UUID alapján
+    notes_collection.delete_one({"note_id": note_id})
     return redirect(url_for('index'))
 
 
+@app.route('/myprofile')
+def myprofile():
+    if "username" not in session:
+        return redirect(url_for('login'))
+    else:
+        username = session["username"]
+        return render_template('myprofile.html', username = username)
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=5001)
