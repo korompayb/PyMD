@@ -152,7 +152,7 @@ def view_note(note_id):
         username = session["username"]
     # Keresés UUID alapján
     note = notes_collection.find_one({"note_id": note_id})
-    return render_template('view.html', content=note['content'], username= username)
+    return render_template('view.html', content=note['content'], username= username, note=note)
 
 
 @app.route('/delete/<note_id>')

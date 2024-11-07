@@ -3,6 +3,7 @@
 {% block content %}
 
 <div class="note-content">
+    <!-- <h1>{{ note.note_name }}</h1> -->
     {{ content | safe }}
 </div>
 <md-fab variant="secondary" data-label="Switch Theme" size="medium" href="{{ url_for('index') }}">
