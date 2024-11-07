@@ -83,6 +83,27 @@ def new_note():
 
     return render_template('edit.html', note=None, username = session["username"])  # Ha GET kérés van, akkor üres form
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        # Ellenőrizzük, hogy a felhasználó már létezik-e
+        existing_user = users_collection.find_one({"username": username})
+        if existing_user:
+            return render_template('login.html', message='Ez a felhasználónév már foglalt.')
+
+        # Új felhasználó létrehozása
+        users_collection.insert_one({
+            "username": username,
+            "password": password  # Érdemes lenne titkosítani a jelszót
+        })
+
+        return redirect(url_for('login'))
+
+    return render_template('register.html')  # A regisztrációs űrlap
+
 
 @app.route('/edit/<note_id>', methods=['GET', 'POST'])
 def edit_note(note_id):

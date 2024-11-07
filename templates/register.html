@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-<title>PyMD - Bejelentkezés</title>
+<title>PyMD - Regisztráció</title>
 
-<md-dialog id="loginDialog"
+<md-dialog id="registerDialog"
         ?quick=${quick}
         ?no-focus-trap=${noFocusTrap}>
-        <div slot="headline">Bejelentkezés</div>
-        <md-icon slot="icon">account_circle</md-icon>
-    <form slot="content" id="form-id" method="POST" action="{{ url_for('login') }}">
-        <md-filled-text-field id="username" label="Felhasználónév" name="username">
-            <md-icon-button slot="trailing-icon" type="">
+        <div slot="headline">Regisztráció</div>
+        <md-icon slot="icon">person_add</md-icon>
+    <form slot="content" id="register-form-id" method="POST" action="{{ url_for('register') }}">
+        <md-filled-text-field id="username" label="Felhasználónév" name="username" required>
+            <md-icon-button slot="trailing-icon">
                 <md-icon>person</md-icon>
             </md-icon-button>
         </md-filled-text-field>
@@ -23,21 +23,18 @@
         </md-filled-text-field>
     </form>
     <form slot="content" method="dialog">
-        {{message}}
-        <p>Még nincs fiókja? <a href="{{ url_for('register') }}">Regisztráljon itt!</a></p>
-
+        {{ message }}
       </form>
     <div slot="actions">
-        <md-text-button form="form-id" value="cancel" onclick="closeDialog()">Mégse</md-text-button>
-        <md-text-button form="form-id" value="submit">
+        <md-text-button form="register-form-id" value="cancel" onclick="closeDialog()">Mégse</md-text-button>
+        <md-text-button form="register-form-id" value="submit">
             <md-icon>send</md-icon>
         </md-text-button>
     </div>
 </md-dialog>
 
-
 <script>
-    const dialog = document.getElementById('loginDialog');
+    const dialog = document.getElementById('registerDialog');
 
     window.addEventListener('load', async () => {
         await dialog.show(); // Megnyitja a dialógust az oldal betöltésekor
