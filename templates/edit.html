@@ -1,0 +1,11 @@
+<!-- templates/edit.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ 'Új Jegyzet Írása' if note is none else 'Jegyzet Szerkesztése' }}</h1>
+<form action="" method="post">
+    <input type="text" name="note_name" placeholder="Jegyzet címe" required>
+    <textarea id="editor" name="content">{{ note if note else '' }}</textarea>
+    <button type="submit" class="btn btn-primary">Mentés</button>
+</form>
+
+{% endblock %}
