@@ -81,7 +81,7 @@ def new_note():
 
         return redirect(url_for('index'))
 
-    return render_template('edit.html', note=None, username = username)  # Ha GET kérés van, akkor üres form
+    return render_template('edit.html', note=None, username = session["username"])  # Ha GET kérés van, akkor üres form
 
 
 @app.route('/edit/<note_id>', methods=['GET', 'POST'])
