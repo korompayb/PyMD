@@ -13,6 +13,7 @@ db = client.PyMD
 users_collection = db.users
 notes_collection = db.notes  # Create a new collection for notes
 
+version = "2.0.2 (hotfix)"  # Verzió szám
 
 
 @app.route('/')
@@ -27,7 +28,7 @@ def index():
     notes = [{"note_id": str(note["note_id"]), "note_name": note["note_name"], "created_at": note["created_at"], "content": note["content"]} for note in notes]
     
     now = datetime.now()  # Current date and time
-    return render_template('index.html', notes=notes, now=now, username = username)
+    return render_template('index.html', notes=notes, now=now, username = username, show_popup='false', version=version)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -43,7 +44,7 @@ def login():
             return render_template('login.html', message='Hibás jelszó')
         else:
             session["username"] = username
-            return redirect(url_for('index'))
+            return redirect(url_for('index', show_popup='true', version=version))
     else:
         return render_template('login.html')
 
@@ -53,7 +54,7 @@ def about():
         return redirect(url_for('login'))
     else:
         username = session["username"]
-    return render_template('about.html', username = username)
+    return render_template('about.html', username = username, version=version)
 
 
 # Create a new note
@@ -102,7 +103,7 @@ def register():
 
         return redirect(url_for('login'))
 
-    return render_template('register.html')  # A regisztrációs űrlap
+    return render_template('register.html', version=version)  # A regisztrációs űrlap
 
 
 @app.route('/edit/<note_id>', methods=['GET', 'POST'])
@@ -134,7 +135,7 @@ def edit_note(note_id):
                 {"$set": {"note_name": note_name, "content": content}}
             )
 
-        return redirect(url_for('index'))
+        return redirect(url_for('index'), version=version)
 
     # Ha GET kérés érkezik
     note = None
@@ -152,7 +153,7 @@ def view_note(note_id):
         username = session["username"]
     # Keresés UUID alapján
     note = notes_collection.find_one({"note_id": note_id})
-    return render_template('view.html', content=note['content'], username= username, note=note)
+    return render_template('view.html', content=note['content'], username= username, note=note, version=version)
 
 
 @app.route('/delete/<note_id>')
@@ -171,7 +172,17 @@ def myprofile():
         return redirect(url_for('login'))
     else:
         username = session["username"]
-        return render_template('myprofile.html', username = username)
+        return render_template('myprofile.html', username = username, version=version)
+
+
+@app.route('/history')
+def history():
+    if "username" not in session:
+        return redirect(url_for('login'))
+    else:
+        username = session["username"]
+    return render_template('history.html', username = username, version=version)
+
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=5001)

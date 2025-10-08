@@ -91,12 +91,41 @@ import '@material/web/checkbox/checkbox.js';
             <md-icon slot="icon" aria-hidden="true" id="theme-icon">dark_mode</md-icon>
         </md-fab>
     </div>
-    
+    <md-dialog id="version-popup">
+        <div slot="headline">Sikeres frissítés!</div>
+        <md-icon slot="icon">check_circle</md-icon>
+        <form id="form" slot="content" method="dialog">
+            <br>Üdvözlünk a PyMD új verziójában! <br>
+          <strong>{{ version }}</strong>
+        </form>
+        <div slot="actions">
+          <md-filled-tonal-button form="form" value="continue">Tovább olvas</md-filled-tonal-button>
+          <script>
+            //if clicked open version info and history
+            document.querySelector('md-filled-tonal-button').addEventListener('click', function() {
+                window.location.href = "{{ url_for('history') }}";
+            });
+          </script>
+        </div>
+      </md-dialog>
+     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const urlParams = new URLSearchParams(window.location.search);
+          const showPopup = urlParams.get('show_popup');
+      
+          if (showPopup === 'true') {
+            const dialog = document.getElementById('version-popup');
+            if (dialog) {
+              dialog.show();
+            }
+          }
+        });
+     </script>
     
     <div class="container">
         {% block content %}{% endblock %}
     </div>
-    
+   
        
     <script>
         document.addEventListener("DOMContentLoaded", function () {
