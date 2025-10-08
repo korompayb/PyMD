@@ -3,12 +3,13 @@
 {% block content %}
 
 <div class="note-content">
-    <!-- <h1>{{ note.note_name }}</h1> -->
+    <h1 style="position: sticky; top: 0; background: var(--md-sys-color-surface); padding-top: 10px; padding-bottom: 10px;">{{ note.note_name }}</h1>
     {{ content | safe }}
 </div>
-<md-fab variant="secondary" data-label="Switch Theme" size="medium" href="{{ url_for('index') }}">
+<md-fab style="position: fixed; bottom: 30px; right: 22px;" variant="secondary" data-label="Vissza" size="big" onclick="window.history.back()" href="{{ url_for('index') }}">
     <md-icon slot="icon" aria-hidden="true">arrow_back</md-icon>
 </md-fab>
+
 
 
 

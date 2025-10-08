@@ -14,6 +14,7 @@
     <script src="https://cdn.tiny.cloud/1/8yauam9wk26s9zipy53adu6mzj02690i9jw1hpbd5opo66a6/tinymce/7/tinymce.min.js"
     referrerpolicy="origin"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
   <script type="importmap">
     {
       "imports": {
@@ -45,7 +46,7 @@ import '@material/web/checkbox/checkbox.js';
   <script>
     tinymce.init({
         selector: 'textarea',
-        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker',
+        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker fullscreen preview code',
         toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
     });
 </script>
@@ -86,7 +87,7 @@ import '@material/web/checkbox/checkbox.js';
             <a href="{{ url_for('login') }}"><md-icon slot="icon">logout</md-icon>Kilépés</a>
             
         </div>
-        <md-fab class="mode-switch" variant="primary" data-label="Switch Theme" size="medium">
+        <md-fab style="position: fixed; bottom: 15px; left: 22px;" class="mode-switch" variant="primary" data-label="Switch Theme" size="medium">
             <md-icon slot="icon" aria-hidden="true" id="theme-icon">dark_mode</md-icon>
         </md-fab>
     </div>
