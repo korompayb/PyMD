@@ -135,7 +135,7 @@ def edit_note(note_id):
                 {"$set": {"note_name": note_name, "content": content}}
             )
 
-        return redirect(url_for('index'), version=version)
+        return redirect(url_for('index'))
 
     # Ha GET kérés érkezik
     note = None
@@ -173,7 +173,7 @@ def delete_note(note_id):
 
     # Törlés UUID alapján
     notes_collection.delete_one({"note_id": note_id})
-    return redirect(url_for('index'))
+    return redirect(url_for('index'), version=version)
 
 
 @app.route('/myprofile')
