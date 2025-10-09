@@ -78,6 +78,108 @@
     --md-sys-color-on-error-container: #410002;
 }
 
+.theme-obsidian.dark-mode, .theme-obsidian {
+    /* ----------------------------------------------------------------------
+     * FŐ HÁTTÉR ÉS FELÜLETEK (Surfaces)
+     * ---------------------------------------------------------------------- */
+    --md-sys-color-background: #191919;
+    --md-sys-color-on-background: #E8E8E8;
+    --md-sys-color-surface: #191919; /* Fő háttér (jegyzetszerkesztő, konténer) */
+    
+    --md-sys-color-surface-dim: #191919;
+    --md-sys-color-surface-bright: #303030;
+    
+    --md-sys-color-surface-container-lowest: #101010;
+    --md-sys-color-surface-container-low: #1F1F1F; /* Oldalsáv és lapok konténere */
+    --md-sys-color-surface-container: #232323;
+    --md-sys-color-surface-container-high: #2B2B2B;
+    --md-sys-color-surface-container-highest: #333333; /* Kiemelt elemek háttér */
+    
+    --md-sys-color-on-surface: #E8E8E8; /* Szöveg színe (Fehér/Világosszürke) */
+    --md-sys-color-surface-variant: #404040;
+    --md-sys-color-on-surface-variant: #B0B0B0;
+    --md-sys-color-inverse-surface: #E8E8E8;
+    --md-sys-color-inverse-on-surface: #191919;
+
+    /* ----------------------------------------------------------------------
+     * PRIMER ÉS KIEMELŐ SZÍNEK (Obsidian Kék)
+     * ---------------------------------------------------------------------- */
+    --md-sys-color-surface-tint: #89B4FA; /* Kiemelő szín árnyalata */
+    --md-sys-color-primary: #89B4FA; /* Kiemelés (Gombok, Tabs, Aktív ikonok) */
+    --md-sys-color-on-primary: #191919; /* Text in Primary color */
+    
+    --md-sys-color-primary-container: #2A497A;
+    --md-sys-color-on-primary-container: #DCE5FF;
+    --md-sys-color-inverse-primary: #386AD3;
+
+    /* ----------------------------------------------------------------------
+     * MÁSODLAGOS ÉS HARMADLAGOS SZÍNEK
+     * ---------------------------------------------------------------------- */
+    --md-sys-color-secondary: #C899FF; /* Egy másodlagos kiemelés (Lila) */
+    --md-sys-color-on-secondary: #300067;
+    --md-sys-color-secondary-container: #5E3C9A;
+    --md-sys-color-on-secondary-container: #E7DEFF;
+    
+    --md-sys-color-tertiary: #52D8A4;
+    --md-sys-color-on-tertiary: #003823;
+    --md-sys-color-tertiary-container: #005133;
+    --md-sys-color-on-tertiary-container: #6FFBC0;
+
+    /* ----------------------------------------------------------------------
+     * TOVÁBBI ELEMEK
+     * ---------------------------------------------------------------------- */
+    --md-sys-color-outline: #505050; /* Határok, vonalak */
+    --md-sys-color-outline-variant: #404040;
+    
+    --md-sys-color-shadow: #000000;
+    --md-sys-color-scrim: #000000;
+
+    --bs-code-color: #8742ff;
+    /* ----------------------------------------------------------------------
+     * HIBA (ERROR)
+     * ---------------------------------------------------------------------- */
+    --md-sys-color-error: #FF5D5D;
+    --md-sys-color-on-error: #690005;
+    --md-sys-color-error-container: #93000a;
+    --md-sys-color-on-error-container: #FFB0AE;
+}
+
+
+.theme-graphite.dark-mode, .theme-graphite {
+    --md-sys-color-surface: #303030 ;
+    --md-sys-color-background: #303030 ;
+    --md-sys-color-on-surface: #E0E0E0 ; 
+    --md-sys-color-surface-container: #3B3B3B ;
+    --md-sys-color-on-surface-variant: #C0C0C0 ;
+    --md-sys-color-surface-container-low: #2A2A2A ;
+    --md-sys-color-surface-container-lowest: #242424 ;
+    --md-sys-color-inverse-surface: #E0E0E0 ;
+    --md-sys-color-inverse-on-surface: #303030 ;
+
+    --md-sys-color-primary: #00BCD4 ; 
+    --md-sys-color-on-primary: #202020 ;
+    --md-sys-color-primary-container: #005f66 ;
+    --md-sys-color-on-primary-container: #A0F0FF ;
+    --md-sys-color-inverse-primary: #006978 ;
+    --bs-code-color: #00BCD4 ;
+
+    --md-sys-color-secondary: #A0A0A0 ;
+    --md-sys-color-on-secondary: #E0E0E0 ;
+    --md-sys-color-secondary-container: #5E5E5E ;
+    --md-sys-color-on-secondary-container: #F0F0F0;
+    --md-sys-color-tertiary: #646464 ;
+    --md-sys-color-on-tertiary: #202020 ;
+    --md-sys-color-tertiary-container: #606060 ;
+    --md-sys-color-on-tertiary-container: #ffffff !important;
+    --md-sys-color-outline: #505050 !important;
+
+    --md-sys-color-outline-variant: #505050 !important;
+    --md-sys-color-on-surface-variant: #C0C0C0 !important;
+    --md-sys-color-surface-variant: #505050 !important;
+    --md-sys-color-surface-tint: #00BCD4 !important;
+
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: var(--md-sys-color-background);

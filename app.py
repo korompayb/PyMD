@@ -13,7 +13,7 @@ db = client.PyMD
 users_collection = db.users
 notes_collection = db.notes  # Create a new collection for notes
 
-version = "2.0.2 (hotfix)"  # Verzió szám
+version = "2.0.3 (Theme Patch)"  # Verzió szám
 
 
 @app.route('/')
@@ -156,6 +156,16 @@ def view_note(note_id):
     return render_template('view.html', content=note['content'], username= username, note=note, version=version)
 
 
+@app.route('/settings')
+def settings():
+    if "username" not in session:
+        return redirect(url_for('login'))
+    else:
+        username = session["username"]
+        user = users_collection.find_one({"username": username})
+    return render_template('settings.html', username=username, version=version)
+
+
 @app.route('/delete/<note_id>')
 def delete_note(note_id):
     if "username" not in session:
@@ -172,7 +182,10 @@ def myprofile():
         return redirect(url_for('login'))
     else:
         username = session["username"]
-        return render_template('myprofile.html', username = username, version=version)
+        email = users_collection.find_one({"username": username}).get("email", "N/A")
+        created_at = users_collection.find_one({"username": username}).get("created_at", "N/A")
+        note_count = notes_collection.count_documents({"username": username})  # Jegyzetek száma
+        return render_template('myprofile.html', username = username, email=email, created_at=created_at, note_count=note_count, version=version)
 
 
 @app.route('/history')

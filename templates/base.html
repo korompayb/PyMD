@@ -76,7 +76,7 @@ import '@material/web/checkbox/checkbox.js';
             Dolgozatok
         </div> -->
         <div class="nav-item " >
-          <a href="{{ url_for('myprofile') }}"><md-icon slot="icon">account_circle</md-icon><br>{{ username }}
+          <a href="{{ url_for('settings') }}"><md-icon slot="icon">settings</md-icon><br>Beállítások
           </a>
       </div>
       <div class="nav-item " >
@@ -128,45 +128,97 @@ import '@material/web/checkbox/checkbox.js';
    
        
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const switchButton = document.querySelector('.mode-switch');
-            const themeIcon = document.getElementById('theme-icon');
+    // ----------------------------------------------------------------------
+    // 1. SZÍNSTÍLUS KEZELÉS ( applyColorTheme )
+    // Ez a funkció csak az egyedi színtéma osztályokat kezeli.
+    // ----------------------------------------------------------------------
+    function applyColorTheme(themeName) {
+        const body = document.documentElement; 
+        
+        // Eltávolítja az összes korábbi színstílus osztályt
+        body.classList.remove('theme-obsidian', 'theme-graphite');
+        
+        // Hozzáadja az új osztályt
+        if (themeName === 'obsidian') {
+            body.classList.add('theme-obsidian');
+        } else if (themeName === 'graphite') {
+            body.classList.add('theme-graphite');
+        }
+        
+        // Fontos: Itt NINCS sötét módra kényszerítés! 
+        // A dark/light módot a fő CSS :root.dark-mode / :root.light-mode blokkja kezeli
+        // és a toggleTheme() kezeli a váltást.
+    }
+
+    function loadColorTheme() {
+        const savedColorTheme = localStorage.getItem('colorTheme');
+        if (savedColorTheme && savedColorTheme !== 'default') {
+            applyColorTheme(savedColorTheme);
+        }
+        // Ha nincs mentve, hagyjuk az alapértelmezett palettát (amelyet a dark/light mód kezel)
+    }
     
-            // Function to toggle the dark and light modes
-            const toggleTheme = () => {
-                if (document.documentElement.classList.contains('dark-mode')) {
-                    document.documentElement.classList.remove('dark-mode');
-                    document.documentElement.classList.add('light-mode');
-                    themeIcon.textContent = 'light_mode'; // Change icon to light mode
-                    localStorage.setItem('theme', 'light'); // Save the theme in localStorage
-                } else {
-                    document.documentElement.classList.remove('light-mode');
-                    document.documentElement.classList.add('dark-mode');
-                    themeIcon.textContent = 'dark_mode'; // Change icon to dark mode
-                    localStorage.setItem('theme', 'dark'); // Save the theme in localStorage
-                }
-            };
-    
-            // Load the saved theme from localStorage
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme) {
-                if (savedTheme === 'dark') {
-                    document.documentElement.classList.add('dark-mode');
-                    themeIcon.textContent = 'dark_mode';
-                } else {
-                    document.documentElement.classList.add('light-mode');
-                    themeIcon.textContent = 'light_mode';
-                }
+    // Globális függvény, amit a Beállítások oldalon lévő gombok hívnak
+    window.setTheme = function(themeName) {
+        applyColorTheme(themeName);
+        localStorage.setItem('colorTheme', themeName);
+        console.log(`Színstílus beállítva: ${themeName}`);
+    }
+
+
+    // ----------------------------------------------------------------------
+    // 2. SÖTÉT/VILÁGOS MÓD KEZELÉS ( toggleTheme )
+    // JAVÍTVA: Nincs több színstílus felülírás!
+    // ----------------------------------------------------------------------
+    document.addEventListener("DOMContentLoaded", function () {
+        const switchButton = document.querySelector('.mode-switch');
+        const themeIcon = document.getElementById('theme-icon');
+
+        const toggleTheme = () => {
+            if (document.documentElement.classList.contains('dark-mode')) {
+                // Átváltás világos módra
+                document.documentElement.classList.remove('dark-mode');
+                document.documentElement.classList.add('light-mode');
+                themeIcon.textContent = 'light_mode'; 
+                localStorage.setItem('theme', 'light'); 
+
+                // KIEGÉSZÍTÉS: Világos módra váltáskor el kell távolítani a dark-mode színeket,
+                // de az egyedi színtéma (pl. .theme-obsidian) MEGMOZDÍTHATATLAN marad.
+
             } else {
-                // If no theme is saved, default to light mode
+                // Átváltás sötét módra
+                document.documentElement.classList.remove('light-mode');
+                document.documentElement.classList.add('dark-mode');
+                themeIcon.textContent = 'dark_mode'; 
+                localStorage.setItem('theme', 'dark'); 
+            }
+        };
+
+        // Load the saved dark/light theme (az eredeti logika)
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+                themeIcon.textContent = 'dark_mode';
+            } else {
                 document.documentElement.classList.add('light-mode');
                 themeIcon.textContent = 'light_mode';
             }
-    
-            // Event listener for the switch button
+        } else {
+            // Default: Light mode
+            document.documentElement.classList.add('light-mode');
+            themeIcon.textContent = 'light_mode';
+        }
+
+        // Töltse be az elmentett színstílust is!
+        loadColorTheme();
+
+        // Event listener for the switch button
+        if (switchButton) {
             switchButton.addEventListener('click', toggleTheme);
-        });
-    </script>
+        }
+    });
+</script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         ;(function () {
@@ -190,5 +242,6 @@ import '@material/web/checkbox/checkbox.js';
 window.onload = addLineNumbers;
 
     </script>
+  
 </body>
 </html>

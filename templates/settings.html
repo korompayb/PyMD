@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block content %}
+<title>Beállítások | PyMD</title>
+
+<span style="position: fixed; top: 10px; right: 20px;">Verzió: {{ version }}</span>
+
+<div class="note-content">
+    <h1 style="position: sticky; top: 0; background: var(--md-sys-color-surface); padding-top: 10px; padding-bottom: 10px;">Beállítások</h1>
+
+    <md-tabs id="settings-tabs" style="min-height: 50px !important ;"> 
+        <md-primary-tab active>Profilbeállítások <md-icon slot="icon">person</md-icon>
+        </md-primary-tab>
+        <md-primary-tab>Megjelenítés
+            <md-icon slot="icon">palette</md-icon>
+        </md-primary-tab>
+        <md-primary-tab>Egyéb
+            <md-icon slot="icon">more_horiz</md-icon>
+        </md-primary-tab>
+    </md-tabs>
+
+    <script type="module">
+        // Fontos: Előfordulhat, hogy a script túl korán fut le.
+        // Ezt a DOMContentLoaded eseménykezelővel lehet biztosítani.
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.getElementById('settings-tabs'); // ID alapján lekérjük a fő fület
+            const profilSettings = document.getElementById('profil-settings');
+            const appearanceSettings = document.getElementById('appearance-settings');
+            const otherSettings = document.getElementById('other-settings');
+
+            // Kezdeti állapot beállítása, ha a böngésző nem a CSS-ből olvassa ki a 'display:none'-t
+            profilSettings.style.display = 'block';
+            appearanceSettings.style.display = 'none';
+            otherSettings.style.display = 'none';
+
+
+            tabs.addEventListener('change', (event) => { // MWC a 'change' eseményt használja!
+                const selectedIndex = event.target.activeTabIndex; // A kiválasztott fül indexe (0, 1, 2...)
+                
+                // Minden szekciót elrejtünk
+                profilSettings.style.display = 'none';
+                appearanceSettings.style.display = 'none';
+                otherSettings.style.display = 'none';
+                
+                // Csak a kiválasztottat mutatjuk
+                if (selectedIndex === 0) {
+                    profilSettings.style.display = 'block';
+                } else if (selectedIndex === 1) {
+                    appearanceSettings.style.display = 'block';
+                } else if (selectedIndex === 2) {
+                    otherSettings.style.display = 'block';
+                }
+            });
+        });
+    </script>
+
+
+    <section id="profil-settings">
+        <h3  style="margin-top: 20px; color: var(--md-sys-color-on-surface);">Profilbeállítások</h3>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <md-filled-tonal-button onclick="window.location.href='{{ url_for('myprofile') }}'" style="margin-top: 10px; margin-bottom: 10px;">
+            <md-icon slot="icon">person</md-icon>
+            Profilom
+        </md-filled-tonal-button>
+        <br>
+        <md-filled-tonal-button disabled onclick="" style="margin-top: 10px; margin-bottom: 10px;">
+            <md-icon slot="icon">lock</md-icon>
+            Jelszó megváltoztatása
+        </md-filled-tonal-button>
+        <br>
+        <md-filled-button disabled onclick="" 
+            style="margin-top: 10px; margin-bottom: 10px; --md-filled-button-label-text-font: system-ui; --md-sys-color-primary: #b00020;  --md-sys-color-on-primary: #FFFFFF;">
+            <md-icon slot="icon">delete_forever</md-icon>
+            Fiók törlése
+        </md-filled-button>
+        <br>
+        <md-filled-tonal-button onclick="window.location.href='{{ url_for('about') }}'" style="margin-top: 10px; margin-bottom: 10px;">
+            <md-icon slot="icon">info</md-icon>
+            Névjegy
+        </md-filled-tonal-button>
+        </div>
+    </section>
+
+
+
+    <section id="appearance-settings" style="display:none;">
+    <h3 style="margin-top: 20px; color: var(--md-sys-color-on-surface);">Színstílusok</h3>
+
+    <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+        
+        <md-filled-tonal-button onclick="setTheme('default')" style="--md-sys-color-primary: #6750A4;">
+            Alapértelmezett
+        </md-filled-tonal-button>
+        
+        <md-filled-tonal-button onclick="setTheme('obsidian')" style="--md-sys-color-primary: #A8A8C3; background-color: #202020; color: #E0E0E0;">
+            <md-icon slot="icon">auto_fix_high</md-icon>
+            Obsidian Fekete
+        </md-filled-tonal-button>
+        
+        <md-filled-tonal-button onclick="setTheme('graphite')" style="--md-sys-color-primary: #00BCD4; background-color: #303030; color: #F0F0F0;">
+            <md-icon slot="icon">auto_fix_high</md-icon>
+            Grafit Szürke
+        </md-filled-tonal-button>
+
+        <md-filled-tonal-button disabled>
+            <md-icon slot="icon">block</md-icon>
+            Narancs
+        </md-filled-tonal-button>
+
+        Alkotói megjegyzés: A egyedi színsémák nem támogatják a sötét és világos mód közötti váltást.
+    </div>
+
+    <h3 style="margin-top: 30px; color: var(--md-sys-color-on-surface);">Egyéb megjelenítés</h3>
+    
+    <i>Hamarosan</i>
+    <br>
+    </section>
+
+   
+
+
+
+    <section id="other-settings" style="display:none;">
+        <md-filled-tonal-button disabled onclick="" style="margin-top: 10px; margin-bottom: 10px;">
+            <md-icon slot="icon">backup</md-icon>
+            Adatmentés
+        </md-filled-tonal-button>
+        <br>
+        <md-filled-tonal-button disabled onclick="" style="margin-top: 10px; margin-bottom: 10px;">
+            <md-icon slot="icon">restore</md-icon>
+            Adatvisszaállítás
+        </md-filled-tonal-button>
+        <br>
+        <md-filled-tonal-button disabled onclick="" style="margin-top: 10px; margin-bottom: 10px;">
+            <md-icon slot="icon">cloud_upload</md-icon>
+            Felhő szinkronizáció
+        </md-filled-tonal-button>
+    </section>
+</div>
+    
+
+{% endblock %}

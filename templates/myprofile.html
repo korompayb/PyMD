@@ -1,11 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
-
 <div class="note-content">
-    <b>Felhasználónév:</b> {{ username|capitalize }}
-    <br><b>Email cím:</b> {{email}} <i>Hamarosan</i>
-    <br><b>Regisztráció dátuma:</b> {{created_at}} <i>Hamarosan</i>
-    <br><b>Összes jegyzet:</b> {{note_count}} <i>Hamarosan</i>
+    <div style="display: flex; flex-direction: row; justify-content: space-between;" >
+        <div>
+            <b>Felhasználónév:</b> {{ username|capitalize }}
+        </div>
+        <div>
+            <b>Összes jegyzet:</b> {{note_count}}
+        </div>
+    </div>
+    <!-- <md-filled-tonal-button onclick="window.location.href='{{ url_for('settings') }}'" style="margin-top: 10px; margin-bottom: 10px;">
+        <md-icon slot="icon">settings</md-icon>
+        Beállítások
+    </md-filled-tonal-button> -->
 </div>
 <br>
     Nincs több adat
