@@ -3,3 +3,4 @@ Gunicorn
 requests
 pytz
 pymongo
+bs4
