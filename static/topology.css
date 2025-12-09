@@ -6,38 +6,43 @@
 }
 
 
-
 .topo-badge {
   display: inline-block;
-  padding: 2px 6px;
+  padding: 4px 8px;
   margin: 0 2px;
-  border-radius: 6px;
-  font-weight: bold;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
 }
 
-/* Eszközök */
-.topo-switch { background: #ffeb3b; color: #3e2723; }   /* élénk sárga */
-.topo-router { background: #03a9f4; color: #0d47a1; }   /* élénk kék */
-.topo-pc     { background: #4caf50; color: #ffffff; }   /* erős zöld */
-.topo-server { background: #007468; color: #009688;}
+.topo-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
 
-/* Vendor */
-.topo-vendor-cisco   { background: #2196f3; color: #ffffff; }   /* cisco kék */
-.topo-vendor-linksys { background: #9c27b0; color: #ffffff; }   /* lila */
+/* Devices */
+.topo-switch { background: linear-gradient(135deg, #ffeb3b, #fdd835); color: #3e2723; }
+.topo-router { background: linear-gradient(135deg, #03a9f4, #0288d1); color: #ffffff; }
+.topo-pc { background: linear-gradient(135deg, #4caf50, #43a047); color: #ffffff; }
+.topo-server { background: linear-gradient(135deg, #009688, #00796b); color: #ffffff; }
 
-/* Protokollok */
-.topo-proto-vlan  { background: #ff5722; color: #ffffff; }   /* narancs */
-.topo-proto-dhcp  { background: #673ab7; color: #ffffff; }   /* mély lila */
-.topo-proto-ospf  { background: #009688; color: #ffffff; }   /* türkiz */
-.topo-proto-eigrp { background: #e91e63; color: #ffffff; }   /* pink */
-.topo-proto-stp   { background: #795548; color: #ffffff; }   /* barna */
+/* Vendors */
+.topo-vendor-cisco { background: linear-gradient(135deg, #1976d2, #1565c0); color: #ffffff; }
+.topo-vendor-linksys { background: linear-gradient(135deg, #7b1fa2, #6a1b9a); color: #ffffff; }
 
-/* Interfészek */
-.topo-if        { background: #607d8b; color: #ffffff; }   /* szürke */
-.topo-if-fast   { background: #00bcd4; color: #ffffff; }   /* cián */
-.topo-if-gig    { background: #8bc34a; color: #ffffff; }   /* lime zöld */
-.topo-if-serial { background: #f44336; color: #ffffff; }   /* piros */
+/* Protocols */
+.topo-proto-vlan { background: linear-gradient(135deg, #ff5722, #e64a19); color: #ffffff; }
+.topo-proto-dhcp { background: linear-gradient(135deg, #673ab7, #5e35b1); color: #ffffff; }
+.topo-proto-ospf { background: linear-gradient(135deg, #00897b, #00695c); color: #ffffff; }
+.topo-proto-eigrp { background: linear-gradient(135deg, #c2185b, #ad1457); color: #ffffff; }
+.topo-proto-stp { background: linear-gradient(135deg, #795548, #6d4c41); color: #ffffff; }
 
+/* Interfaces */
+.topo-if { background: linear-gradient(135deg, #455a64, #37474f); color: #ffffff; }
+.topo-if-fast { background: linear-gradient(135deg, #00bcd4, #0097a7); color: #ffffff; }
+.topo-if-gig { background: linear-gradient(135deg, #8bc34a, #7cb342); color: #ffffff; }
+.topo-if-serial { background: linear-gradient(135deg, #f44336, #d32f2f); color: #ffffff; }
 
 /* Ne jelenjen meg <pre> blokkokban */
 
@@ -105,42 +110,57 @@ code .topo-badge {
 
 
 .device-box {
-  background:  var(--md-sys-color-inverse-on-surface);
-  border: 1px solid var(--card-border, #ddd);
-  border-radius: 12px;
+  background: linear-gradient(135deg, var(--md-sys-color-surface) 0%, var(--md-sys-color-surface-dim) 100%);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 16px;
   padding: 1rem;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 140px;
+  height: 180px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  backdrop-filter: blur(10px);
 }
 
 .device-box:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  border-color: var(--md-sys-color-primary);
+}
+
+.device-box:active {
   transform: translateY(-4px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.12);
 }
 
-/* Ikon */
+/* Icon */
 .device-icon {
-  width: 58px;
-  height: 58px;
-  margin-bottom: 0.5rem;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 0.75rem;
   object-fit: contain;
-  fill: none;
-  stroke: var(--icon-color, #333);
-  stroke-width: 2;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  box-shadow: none !important;
 }
 
-/* Szövegek */
+/* Text styles */
 .device-name {
-  font-weight: 600;
-  font-size: 1rem;
-  margin-bottom: 0.25rem;
-  color: var(--md-sys-color-on-background);
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  color: var(--md-sys-color-on-surface);
+  letter-spacing: 0.3px;
 }
 
 .device-ip,
 .device-mask {
-  font-size: 0.85rem;
-  color: var(--md-sys-color-primary);
+  font-size: 0.8rem;
+  color: var(--md-sys-color-on-surface-variant);
   word-break: break-word;
+  line-height: 1.4;
+  margin: 0.2rem 0;
 }

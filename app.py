@@ -161,7 +161,7 @@ db = client.PyMD
 users_collection = db.users
 notes_collection = db.notes  # Create a new collection for notes
 
-version = "2.0.4 (Networking Topology)"  # Verzió szám
+version = "2.0.5 (Networking Topology - hotfix)"  # Verzió szám
 
 
 @app.route('/')

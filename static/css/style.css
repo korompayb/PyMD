@@ -208,11 +208,26 @@ body {
 }
 
 img {
-    margin-left: auto !important;
-    margin-right: auto !important;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     width: 100%;
+    max-width: 600px;
     height: auto;
     object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    padding: 5px;
+}
+
+
+
+table img {
+    max-width: 150px;
+    height: auto;
+    background-color: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
 }
 
 .card-header,
