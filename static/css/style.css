@@ -36,6 +36,7 @@
     --md-sys-color-on-error: #690005;
     --md-sys-color-error-container: #93000a;
     --md-sys-color-on-error-container: #ffdad6;
+    --bs-code-color: #f5cf95;
 }
 
 :root.light-mode, :root {
@@ -76,6 +77,7 @@
     --md-sys-color-on-error: #ffffff;
     --md-sys-color-error-container: #ffdad6;
     --md-sys-color-on-error-container: #410002;
+    --bs-code-color: #5c4316;
 }
 
 .theme-obsidian.dark-mode, .theme-obsidian {
@@ -203,6 +205,14 @@ body {
     border: none;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+img {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
 }
 
 .card-header,

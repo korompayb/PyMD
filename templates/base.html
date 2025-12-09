@@ -10,7 +10,6 @@
       rel="stylesheet">
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <meta charset="UTF-8">
-
     <script src="https://cdn.tiny.cloud/1/8yauam9wk26s9zipy53adu6mzj02690i9jw1hpbd5opo66a6/tinymce/7/tinymce.min.js"
     referrerpolicy="origin"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -43,18 +42,87 @@ import '@material/web/checkbox/checkbox.js';
 
     document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
   </script>
-  <script>
-    tinymce.init({
-        selector: 'textarea',
-        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker fullscreen preview code',
-        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+<script>
+tinymce.init({
+  selector: 'textarea',
+  plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker fullscreen preview code',
+  toolbar: 'undo redo | bold italic underline | devicesMenuButton',
+  menubar: 'file edit view insert format tools table help custom',
+  forced_root_block: false, // ne illesszen automatikusan <p>-t
+  setup: (editor) => {
+
+    // közös függvény a modal megnyitására
+    function openDeviceDialog(deviceType) {
+      editor.windowManager.open({
+        title: 'Insert ' + deviceType,
+        body: {
+          type: 'panel',
+          items: [
+            { type: 'input', name: 'name', label: 'Name' },
+            { type: 'input', name: 'address', label: 'Address' },
+            { type: 'input', name: 'mask', label: 'Mask' }
+          ]
+        },
+        buttons: [
+          { type: 'cancel', text: 'Cancel' },
+          { type: 'submit', text: 'Insert', primary: true }
+        ],
+        onSubmit: (api) => {
+          const d = api.getData();
+          editor.insertContent(
+            `<section class="${deviceType.toLowerCase()}" 
+              data-name="${d.name}" 
+              data-address="${d.address}" 
+              data-mask="${d.mask}"></section>`
+          );
+          api.close();
+        }
+      });
+    }
+
+    // Topology Section beszúrása úgy, hogy a kurzor benne legyen
+    function insertTopologySection() {
+      editor.insertContent('<section class="topology">Topológia</section>');
+    }
+
+    // Almenü regisztrálása a menüsorhoz
+    editor.ui.registry.addNestedMenuItem('devicesMenu', {
+      text: 'Insert Device',
+      getSubmenuItems: () => [
+        { type: 'menuitem', text: 'Switch', onAction: () => openDeviceDialog('Switch') },
+        { type: 'menuitem', text: 'Router', onAction: () => openDeviceDialog('Router') },
+        { type: 'menuitem', text: 'PC', onAction: () => openDeviceDialog('PC') },
+        { type: 'menuitem', text: 'Server', onAction: () => openDeviceDialog('Server') },
+        { type: 'menuitem', text: 'Topology Section', onAction: () => insertTopologySection() }
+      ]
     });
+
+    // Toolbar gomb, ami ugyanazt az almenüt nyitja
+    editor.ui.registry.addMenuButton('devicesMenuButton', {
+      text: 'Insert Device',
+      fetch: (callback) => {
+        callback([
+          { type: 'menuitem', text: 'Switch', onAction: () => openDeviceDialog('Switch') },
+          { type: 'menuitem', text: 'Router', onAction: () => openDeviceDialog('Router') },
+          { type: 'menuitem', text: 'PC', onAction: () => openDeviceDialog('PC') },
+          { type: 'menuitem', text: 'Server', onAction: () => openDeviceDialog('Server') },
+          { type: 'menuitem', text: 'Topology Section', onAction: () => insertTopologySection() }
+        ]);
+      }
+    });
+  }
+});
 </script>
+
+
+
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='topology.css') }}">
 </head>
 <body>
     <div class="sidebar">

@@ -4,7 +4,34 @@
 
 <div class="note-content">
     <h1 style="position: sticky; top: 0; background: var(--md-sys-color-surface); padding-top: 10px; padding-bottom: 10px;">{{ note.note_name }}</h1>
+    <div style="display: flex; justify-content: space-between;">
+        {% if topo.interfaces %}
+        <section class="interfaces">
+        <h4>Interfészek</h4>
+        <div class="interface-row">
+            {% for iface in topo.interfaces %}
+                <span class="topo-badge topo-if">{{ iface }}</span>
+            {% endfor %}
+        </div>
+        </section>
+        {% endif %}
+        {% if topo.vlans %}
+        <section class="interfaces">
+        <h4>VLAN-ok</h4>
+        <div class="interface-row">
+            {% for iface in topo.vlans %}
+                <span class="topo-badge topo-proto-vlan">{{ iface }}</span>
+            {% endfor %}
+        </div>
+        </section>
+        {% endif %}
+    </div>
+    <hr>
     {{ content | safe }}
+
+    {% if topo %}
+    <pre>{{ topo|tojson(indent=2) }}</pre>
+    {% endif %}
 </div>
 <md-fab style="position: fixed; bottom: 30px; right: 22px;" variant="secondary" data-label="Vissza" size="big" onclick="window.history.back()" href="{{ url_for('index') }}">
     <md-icon slot="icon" aria-hidden="true">arrow_back</md-icon>

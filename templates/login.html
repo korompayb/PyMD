@@ -9,6 +9,9 @@
         <div slot="headline">Bejelentkezés</div>
         <md-icon slot="icon">account_circle</md-icon>
     <form slot="content" id="form-id" method="POST" action="{{ url_for('login') }}">
+        <!-- hidden paraméter a next értékhez -->
+        <input type="hidden" name="next" value="{{ next }}">
+
         <md-filled-text-field id="username" label="Felhasználónév" name="username">
             <md-icon-button slot="trailing-icon" type="">
                 <md-icon>person</md-icon>
@@ -25,8 +28,7 @@
     <form slot="content" method="dialog">
         {{message}}
         <p>Még nincs fiókja? <a href="{{ url_for('register') }}">Regisztráljon itt!</a></p>
-
-      </form>
+    </form>
     <div slot="actions">
         <md-text-button form="form-id" value="cancel" onclick="closeDialog()">Mégse</md-text-button>
         <md-text-button form="form-id" value="submit">
@@ -35,7 +37,6 @@
     </div>
 </md-dialog>
 
-
 <script>
     const dialog = document.getElementById('loginDialog');
 
@@ -43,7 +44,6 @@
         await dialog.show(); // Megnyitja a dialógust az oldal betöltésekor
     });
 
-    // Funkció a dialógus bezárására
     function closeDialog() {
         dialog.close(); // A dialógus bezárása
     }
